@@ -1,42 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class EnemySpawner : Spawner
+public class EnemySpawner : MonoBehaviour
 {
-    private Vector2 _minMaxRandom = new Vector2(-1, 1);
+    [SerializeField] private List<SpawnPoint> _spawnPoints;
+    [SerializeField] private float _repeatRate = 2f;
 
-    public override void InitilizePoolable(Poolable poolable)
+    private void Start()
     {
-        if (poolable.TryGetComponent(out Enemy enemy))
-        {
-            enemy.Initialize(this);
-        }
-        else
-        {
-            Debug.LogError("Уээ. Ошибка.");
-        }
+        InvokeRepeating(nameof(SpawnEnemyInSpawnPoint), 0.0f, _repeatRate);
     }
 
-    public override void ActionOnGet(Poolable poolable)
+    private void SpawnEnemyInSpawnPoint()
     {
-        if (poolable.TryGetComponent(out Enemy enemy))
-        {
-            enemy.SetMoveDirection(SetRandomMoveDirection());
-        }
-        
-        base.ActionOnGet(poolable);
+        ChooseRandomSpawnPoint().SpawnEnemy();
     }
 
-    private Vector3 SetRandomMoveDirection()
+    private SpawnPoint ChooseRandomSpawnPoint()
     {
-        float xValue;
-        float zValue;
-        float yValue = 0;
-        
-        xValue = Random.Range(_minMaxRandom.x, _minMaxRandom.y);
-        zValue = Random.Range(_minMaxRandom.x, _minMaxRandom.y);
+        SpawnPoint spawnPoint;
 
-        Vector3 direction = new Vector3(xValue, yValue, zValue);
-            
-        return direction;
+        spawnPoint = _spawnPoints[Random.Range(0, _spawnPoints.Count)];
+
+        return spawnPoint;
     }
 }
