@@ -9,10 +9,11 @@ public class SpawnPoint : MonoBehaviour
     
     public void SpawnEnemy()
     {
+        Debug.Log(_spawnedTarget);
         Instantiate(_enemy, transform.position, transform.rotation).GetTarget(_spawnedTarget);
     }
 
-    private void Start()
+    private void Awake()
     {
         _spawnedTarget = Instantiate(_target, transform.position, transform.rotation);
     }

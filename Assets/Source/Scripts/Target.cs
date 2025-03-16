@@ -26,10 +26,10 @@ public class Target : MonoBehaviour
         {
             _currentWaypoint = (_currentWaypoint + 1) % _waypoints.Count;
         }
-        
+
         transform.position = Vector3.MoveTowards(transform.position, _waypoints[_currentWaypoint],
             _moveSpeed * Time.deltaTime);
-        transform.rotation = Quaternion.LookRotation(_waypoints[_currentWaypoint]);
+        transform.LookAt(_waypoints[_currentWaypoint], Vector3.up);
     }
 
     private void SetRandomWaypoints()
@@ -37,15 +37,16 @@ public class Target : MonoBehaviour
         _waypoints = new List<Vector3>();
         _waypoints.AddRange(new Vector3[]
         {
-            GetRandomPosition(),GetRandomPosition(),GetRandomPosition(),
-            GetRandomPosition(),GetRandomPosition()
+            GetRandomPosition(), GetRandomPosition(), GetRandomPosition(),
+            GetRandomPosition(), GetRandomPosition()
         });
-            
     }
 
     private Vector3 GetRandomPosition()
     {
-        Vector3 randomPosition = new Vector3(GetRandomValue(), 0,
+        Vector3 randomPosition;
+
+        randomPosition = new Vector3(GetRandomValue(), 0,
             GetRandomValue());
 
         return randomPosition;
